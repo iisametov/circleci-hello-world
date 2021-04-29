@@ -12,62 +12,61 @@ jobs:
       JVM_OPTS: -Xmx3200m
       
     steps:
-      - checkout
-
-      - run:
-          name: install latest chrome
-          command: |
-            sudo apt-get update
-            sudo apt-get install libxml2-utils
+        - checkout
+        - run:
+            name: install latest chrome
+            command: |
+             sudo apt-get update
+              sudo apt-get install libxml2-utils
             
-       - run:
-          name: Build slack message
-          command: |
-            pwd
-            echo 'export TOTAL_TESTS=$(xmllint  --xpath "string(//div[@id='tests']/div)" build/reports/tests/test/index.html)' >> $BASH_ENV
-            echo 'export FAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" build/reports/tests/test/index.html)' >> $BASH_ENV
-            source $BASH_ENV
-            echo $TOTAL_TESTS
-            echo $FAILED_TESTS
-          when: always
+        - run:
+            name: Build slack message
+            command: |
+             pwd
+             echo 'export TOTAL_TESTS=$(xmllint  --xpath "string(//div[@id='tests']/div)" build/reports/tests/test/index.html)' >> $BASH_ENV
+             echo 'export FAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" build/reports/tests/test/index.html)' >> $BASH_ENV
+             source $BASH_ENV
+              echo $TOTAL_TESTS
+              echo $FAILED_TESTS
+            when: always
 
-      - run:
-          name: check
-          command: |
-            pwd
-            echo $TOTAL_TESTS
-            echo $TOTAL_TESTS
-            xmllint  --xpath "string(//div[@id='tests']/div)" index.html
-            xmllint  --xpath "string(//div[@id='failures']/div)" index.html
-            tests=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)
-            failed=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)
-            echo $tests+$failed
-            ls
-          when: always
+        - run:
+            name: check
+            command: |
+              pwd
+              echo $TOTAL_TESTS
+              echo $TOTAL_TESTS
+              xmllint  --xpath "string(//div[@id='tests']/div)" index.html
+              xmllint  --xpath "string(//div[@id='failures']/div)" index.html
+              tests=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)
+              failed=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)
+              echo $tests+$failed
+              ls
+            when: always
 
       ##############################
-      - run:
-          name: "Setup custom environment variables"
-          command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
-      - run: # print the name of the branch we're on
-          name: "tests?"
-          command: echo ${tests}
+        - run:
+            name: "Setup custom environment variables"
+            command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
+        - run: # print the name of the branch we're on
+            name: "tests?"
+            command: echo ${tests}
       # Run another step, the same as above; note that you can
       # invoke environment variable without curly braces.
-      - run:
-          name: "failures?"
-          command: echo ${failed}
-      - run:
-          name: "What was my custom environment variable?"
-          command: echo ${MY_ENV_VAR}
-      - run:
-          name: "Print total"
-          command: echo ${TOTAL_TESTS}
-      - run:
-          name: "Print failed"
-          command: echo $FAILED_TESTS
+        - run:
+            name: "failures?"
+            command: echo ${failed}
+        - run:
+            name: "What was my custom environment variable?"
+            command: echo ${MY_ENV_VAR}
+        - run:
+            name: "Print total"
+            command: echo ${TOTAL_TESTS}
+        - run:
+            name: "Print failed"
+            command: echo $FAILED_TESTS
 
-      - slack/notify:
-          color: '#ffa500'
-          message: for branch *$CIRCLE_BRANCH*\n*Total - $TOTAL_TESTS $tests, Failed - $FAILED_TESTS ${failed}* $MY_ENV_VAR
-          webhook: $SLACK_WEBHOOK
+        - slack/notify:
+            color: '#ffa500'
+            message: for branch *$CIRCLE_BRANCH*\n*Total - $TOTAL_TESTS $tests, Failed - $FAILED_TESTS ${failed}* $MY_ENV_VAR
+            webhook: $SLACK_WEBHOOK
