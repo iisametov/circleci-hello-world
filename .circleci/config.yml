@@ -31,43 +31,16 @@ jobs:
              pwd
              echo "TOTAL_TESTS=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)" >> $BASH_ENV
              echo "FAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)" >> $BASH_ENV
-              echo $TOTAL_TESTS
-              echo $FAILED_TESTS
-            when: always
-
-        - run:
-            name: check
-            command: |
-              pwd
-              echo $TOTAL_TESTS
-              echo $FAILED_TESTS
-              xmllint  --xpath "string(//div[@id='tests']/div)" index.html
-              xmllint  --xpath "string(//div[@id='failures']/div)" index.html
-              tests=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)
-              failed=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)
-              echo $tests+$failed
-              tot="$tests+$failed\n"
-              echo $tot
-              export tyt=$tot
-              echo 'export TOTALLL="$tests+$failed"' >> $BASH_ENV
-              echo 'export TOTALLLL=A75' >> $BASH_ENV
-              echo $TOTALLL
-              echo $TOTALLLL
-              ls
             when: always
 
       ##############################
         - run:
+            name: "Sxxxbles"
+            command: echo "REPORTING="Total - $TOTAL_TESTS, Failed - $FAILED_TESTS"" >> $BASH_ENV
+        - run:
             name: "Setup custom environment variables"
             command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
-        - run: # print the name of the branch we're on
-            name: "tests?"
-            command: echo ${tests}
-      # Run another step, the same as above; note that you can
-      # invoke environment variable without curly braces.
-        - run:
-            name: "failures?"
-            command: echo ${failed}
+
         - run:
             name: "What was my custom environment variable?"
             command: echo ${MY_ENV_VAR}
@@ -77,19 +50,9 @@ jobs:
         - run:
             name: "Print failed"
             command: echo $FAILED_TESTS
-
         - run:
-            name: "Print TOTALLL"
-            command: echo $TOTALLL
-
-        - run:
-            name: "Print TOTALLLL"
-            command: echo $TOTALLLL
-
-        - run:
-            name: "Print tyt"
-            command: echo $tyt
-            
+            name: "Print reporting"
+            command: echo $REPORTING
         - run:
             name: Assert that from command overrides values from .env and other values
             command: |
