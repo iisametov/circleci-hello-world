@@ -59,14 +59,6 @@ jobs:
 
       ##############################
         - run:
-            name: set var
-            command: echo "export BAZ=baz.`date +%Y%m%d.%H%M`" >> $BASH_ENV
-
-        - run:
-            name: set var 2
-            command: echo "export BAZZ=baz.`$tot`" >> $BASH_ENV
-
-        - run:
             name: "Setup custom environment variables"
             command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
         - run: # print the name of the branch we're on
@@ -100,14 +92,6 @@ jobs:
             command: echo $tyt
 
         - run:
-            name: "Print BAZ"
-            command: echo $BAZ
-
-        - run:
-            name: "Print BAZZ"
-            command: echo $BAZZ
-
-        - run:
               name: Assert that initially only value from runner environment variable is loaded
               command: |
                 echo "VAR1: $VAR1"
@@ -134,10 +118,12 @@ jobs:
         - run:
             name: Assert that from command overrides values from .env and other values
             command: |
+                export VERIF=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)
                 export VAR3=value_from_command
                 echo "VAR1: $VAR1"
                 echo "VAR2: $VAR2"
                 echo "VAR3: $VAR3"
+                echo "VERIF: $VERIF"
 
         - run: echo "VAR2=value2_from_env_updated" >> .env
         - *step_process_dotenv
@@ -148,6 +134,8 @@ jobs:
                 echo "VAR1: $VAR1"
                 echo "VAR2: $VAR2"
                 echo "VAR3: $VAR3"
+                echo "VERIF: $VERIF"
+
 
 
         - slack/notify:
