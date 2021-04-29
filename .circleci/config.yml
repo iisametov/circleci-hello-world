@@ -35,8 +35,8 @@ jobs:
 
       ##############################
         - run:
-            name: "Sxxxbles"
-            command: echo "RREPORTING="Total - $TOTAL_TESTS, Failed - $FAILED_TESTS"" >> $BASH_ENV
+            name: "Sxxxxbles"
+            command: echo "RREPORTING=$TOTAL_TESTS+$FAILED_TESTS" >> $BASH_ENV
         - run:
             name: "Setup custom environment variables"
             command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
