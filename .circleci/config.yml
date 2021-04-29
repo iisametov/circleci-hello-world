@@ -41,8 +41,12 @@ jobs:
               tests=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)
               failed=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)
               echo $tests+$failed
-              echo 'export TOTALLL=$tests+$failed' >> $BASH_ENV
+              tot="$tests+$failed\n"
+              echo $tot
+              echo 'export TOTALLL="$tests+$failed"' >> $BASH_ENV
+              echo 'export TOTALLLL=$tot' >> $BASH_ENV
               echo $TOTALLL
+              echo $TOTALLLL
               ls
             when: always
 
@@ -71,6 +75,10 @@ jobs:
         - run:
             name: "Print TOTALLL"
             command: echo $TOTALLL
+
+        - run:
+            name: "Print TOTALLLL"
+            command: echo $TOTALLLL
 
         - slack/notify:
             color: '#ffa500'
