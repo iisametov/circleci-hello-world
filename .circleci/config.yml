@@ -1,5 +1,11 @@
 version: 2.1
 
+aliases:
+  - &step_process_dotenv
+      run:
+        name: Process .env file variables
+        command: echo "export $(grep -v '^#' .env | xargs)" >> $BASH_ENV
+
 orbs:
   slack: circleci/slack@3.4.2
   
@@ -100,6 +106,59 @@ jobs:
         - run:
             name: "Print BAZZ"
             command: echo $BAZZ
+
+        - run:
+              name: Assert that initially only value from runner environment variable is loaded
+              command: |
+                echo "VAR1: $VAR1"
+                echo "VAR2: $VAR2"
+                echo "VAR3: $VAR3"
+                [ -z "$VAR1" ]
+                [ -z "$VAR2" ]
+                [ "$VAR3" == "value_from_runner" ]
+        - run:
+              name: Assert that a value from command overrides value from runner environment variable
+              command: |
+                export VAR3=value_from_command
+                echo "VAR1: $VAR1"
+                echo "VAR2: $VAR2"
+                echo "VAR3: $VAR3"
+                [ -z "$VAR1" ]
+                [ -z "$VAR2" ]
+                [ "$VAR3" == "value_from_command" ]
+        - *step_process_dotenv
+
+        - run:
+            name: Assert that values from .env override other values
+            command: |
+                echo "VAR1: $VAR1"
+                echo "VAR2: $VAR2"
+                echo "VAR3: $VAR3"
+                [ "$VAR1" == "value1_from_env" ]
+                [ "$VAR2" == "value2_from_env" ]
+                [ "$VAR3" == "value3_from_env" ]
+        - run:
+            name: Assert that from command overrides values from .env and other values
+            command: |
+                export VAR3=value_from_command
+                echo "VAR1: $VAR1"
+                echo "VAR2: $VAR2"
+                echo "VAR3: $VAR3"
+                [ "$VAR1" == "value1_from_env" ]
+                [ "$VAR2" == "value2_from_env" ]
+                [ "$VAR3" == "value_from_command" ]
+        - run: echo "VAR2=value2_from_env_updated" >> .env
+        - *step_process_dotenv
+        - run:
+            name: Assert that loading values from .env overrides old values and does not overide command values.
+            command: |
+                export VAR3=value_from_command
+                echo "VAR1: $VAR1"
+                echo "VAR2: $VAR2"
+                echo "VAR3: $VAR3"
+                [ "$VAR1" == "value1_from_env" ]
+                [ "$VAR2" == "value2_from_env_updated" ]
+                [ "$VAR3" == "value_from_command" ]
 
         - slack/notify:
             color: '#ffa500'
