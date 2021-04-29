@@ -29,8 +29,8 @@ jobs:
             name: Build slack message
             command: |
              pwd
-             echo "export TOTAL_TESTS=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)" >> $BASH_ENV
-             echo "export FAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)" >> $BASH_ENV
+             echo "TOTAL_TESTS=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)" >> $BASH_ENV
+             echo "FAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)" >> $BASH_ENV
               echo $TOTAL_TESTS
               echo $FAILED_TESTS
             when: always
