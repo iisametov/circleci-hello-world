@@ -36,7 +36,7 @@ jobs:
       ##############################
         - run:
             name: "Sxxxbles"
-            command: echo "REPORTING="Total - $TOTAL_TESTS, Failed - $FAILED_TESTS"" >> $BASH_ENV
+            command: echo "RREPORTING="Total - $TOTAL_TESTS, Failed - $FAILED_TESTS"" >> $BASH_ENV
         - run:
             name: "Setup custom environment variables"
             command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
@@ -52,7 +52,7 @@ jobs:
             command: echo $FAILED_TESTS
         - run:
             name: "Print reporting"
-            command: echo $REPORTING
+            command: echo $RREPORTING
         - run:
             name: Assert that from command overrides values from .env and other values
             command: |
