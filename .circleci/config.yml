@@ -44,7 +44,7 @@ jobs:
               tot="$tests+$failed\n"
               echo $tot
               echo 'export TOTALLL="$tests+$failed"' >> $BASH_ENV
-              echo 'export TOTALLLL=$tot' >> $BASH_ENV
+              echo 'export TOTALLLL=A75' >> $BASH_ENV
               echo $TOTALLL
               echo $TOTALLLL
               ls
