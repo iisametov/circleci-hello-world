@@ -90,31 +90,7 @@ jobs:
         - run:
             name: "Print tyt"
             command: echo $tyt
-
-        - run:
-              name: Assert that initially only value from runner environment variable is loaded
-              command: |
-                echo "VAR1: $VAR1"
-                echo "VAR2: $VAR2"
-                echo "VAR3: $VAR3"
-
-        - run:
-              name: Assert that a value from command overrides value from runner environment variable
-              command: |
-                export VAR3=value_from_command
-                echo "VAR1: $VAR1"
-                echo "VAR2: $VAR2"
-                echo "VAR3: $VAR3"
-
-        - *step_process_dotenv
-
-        - run:
-            name: Assert that values from .env override other values
-            command: |
-                echo "VAR1: $VAR1"
-                echo "VAR2: $VAR2"
-                echo "VAR3: $VAR3"
-
+            
         - run:
             name: Assert that from command overrides values from .env and other values
             command: |
@@ -123,7 +99,7 @@ jobs:
                 echo "VAR1: $VAR1"
                 echo "VAR2: $VAR2"
                 echo "VAR3: $VAR3"
-                echo "VERIF: $VERIF"
+               # echo "VERIF: $VERIF"
 
         - run: echo "VAR2=value2_from_env_updated" >> .env
         - *step_process_dotenv
