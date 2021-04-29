@@ -43,6 +43,7 @@ jobs:
               echo $tests+$failed
               tot="$tests+$failed\n"
               echo $tot
+              export tyt=$tot
               echo 'export TOTALLL="$tests+$failed"' >> $BASH_ENV
               echo 'export TOTALLLL=A75' >> $BASH_ENV
               echo $TOTALLL
@@ -79,6 +80,10 @@ jobs:
         - run:
             name: "Print TOTALLLL"
             command: echo $TOTALLLL
+
+        - run:
+            name: "Print tyt"
+            command: echo $tyt
 
         - slack/notify:
             color: '#ffa500'
