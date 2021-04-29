@@ -95,6 +95,7 @@ jobs:
             name: Assert that from command overrides values from .env and other values
             command: |
                 echo "VERIF=$(xmllint  --xpath "string(//div[@id='tests']/div)" index.html)" >> .env
+                echo 'FFAILED_TESTS=$(xmllint  --xpath "string(//div[@id='failures']/div)" index.html)' >> $BASH_ENV
                 export VAR3=value_from_command
                 echo "VAR1: $VAR1"
                 echo "VAR2: $VAR2"
@@ -114,6 +115,7 @@ jobs:
                 echo "VAR3: $VAR3"
                 echo "VARR: $VARR"
                 echo "VERIF: $VERIF"
+                echo "FFAILED_TESTS: $FFAILED_TESTS"
 
 
 
